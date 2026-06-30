@@ -35,6 +35,12 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
+仮想環境の場所を変える場合は `config/app.yaml` の `python` を編集します。
+
+```yaml
+python: venv/Scripts/python.exe
+```
+
 ## 使い方
 
 ### run.bat で実行（Windows）
@@ -43,7 +49,7 @@ python -m venv .venv
 run.bat
 ```
 
-`config\report.yaml` を読み込み、`import\` 内の CSV を一括処理します。  
+`config\app.yaml` の `python` で指定した Python で `config\report.yaml` を読み込み、`import\` 内の CSV を一括処理します。  
 バッチファイルは **ANSI（Shift_JIS）** で保存されているため、日本語メッセージが Windows のコマンドプロンプトで正しく表示されます。
 
 ### コマンドラインで実行
@@ -72,7 +78,8 @@ ReportGenerator/
 │   ├── paths.py                # アプリルート・パス解決（exe 対応）
 │   └── builder.py              # 処理のオーケストレーション
 ├── config/
-│   └── report.yaml             # 設定サンプル
+│   ├── app.yaml                # Python パス・起動設定
+│   └── report.yaml             # レポート設定サンプル
 ├── templates/
 │   └── sales_report.xlsx       # Excel ひな形
 ├── import/                     # CSV 入力フォルダ
@@ -81,7 +88,20 @@ ReportGenerator/
 
 ## 設定ファイルの書き方
 
-設定ファイル内のパス（`paths` セクション）は、**プロジェクトルート（exe 化時は exe と同じフォルダ）** を基準にした相対パスで指定します。作業ディレクトリに依存しません。
+### app.yaml（起動設定）
+
+`run.bat` が参照するアプリケーション設定です。
+
+| 項目 | 説明 | 例 |
+|------|------|-----|
+| `python` | 使用する Python 実行ファイル（相対または絶対パス） | `.venv/Scripts/python.exe` |
+| `report` | レポート設定 YAML のパス | `config/report.yaml` |
+
+パスは **プロジェクトルート（exe 化時は exe と同じフォルダ）** 基準の相対パスで指定できます。
+
+### report.yaml（レポート設定）
+
+レポート設定内のパス（`paths` セクション）は、**プロジェクトルート（exe 化時は exe と同じフォルダ）** を基準にした相対パスで指定します。作業ディレクトリに依存しません。
 
 ```yaml
 paths:
@@ -246,6 +266,7 @@ borders:
 ├── ReportGenerator.exe   # または tranceformer.exe
 ├── run.bat               # 任意
 ├── config/
+│   ├── app.yaml          # Python パス（run.bat 使用時）
 │   └── report.yaml
 ├── import/
 │   └── （CSV ファイル）

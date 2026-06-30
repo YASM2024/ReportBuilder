@@ -1,0 +1,5 @@
+# アプリケーション設定（run.bat が参照）
+# python はプロジェクトルート（exe 化時は exe のあるフォルダ）基準の相対パス、または絶対パスで指定します。
+
+python: .venv/Scripts/python.exe
+report: config/report.yaml
