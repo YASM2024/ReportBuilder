@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+export/*.xlsx
+build/
+dist/
+scripts/

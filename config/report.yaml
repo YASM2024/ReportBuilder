@@ -1,0 +1,65 @@
+# レポート設定サンプル
+# 印刷サイズ・向き・固定ヘッダ・書式は templates/sales_report.xlsx 側で定義します。
+
+name: 売上明細レポート
+
+paths:
+  csv_input: import
+  excel_output: export
+  template: templates/sales_report.xlsx
+
+output:
+  base_name: 売上明細
+  include_timestamp: true
+  timestamp_format: "%Y%m%d_%H%M%S"
+
+csv:
+  encoding: utf-8-sig
+  delimiter: ","
+  pattern: "*.csv"
+
+data:
+  sheet_name: 明細
+  start_row: 6
+
+  columns:
+    # align: left（左詰め）| center（中央揃え）| right（右詰め） 省略時はひな形の書式を維持
+    - csv: 商品コード
+      excel: A
+      align: left
+    - csv: 商品名
+      excel: B
+      align: left
+    - csv: 数量
+      excel: C
+      number_format: "#,##0"
+      align: center
+    - csv: 単価
+      excel: D
+      number_format: "#,##0"
+      align: right
+    - csv: 金額
+      excel: E
+      number_format: "#,##0"
+      align: right
+
+  sort:
+    - csv: 商品コード
+      order: asc
+
+borders:
+  # data.columns の列範囲（A〜E）と header_row から表領域を自動解決します。
+  # header_row が罫線領域の上端、to_row（省略時 last_data_row）が下端です。
+  #
+  # mode の違い:
+  #   outline    … 表の外枠のみ（上下左右の4辺）。列の内側・行の内側には線を引かない。
+  #   horizontal … 横罫線のみ。領域の上端・下端に加え、各行の区切りに横線を引く。
+  #                internal: false にすると上下の外枠2本だけになる。
+  #   vertical   … 縦罫線のみ。領域の左端・右端に加え、各列の区切りに縦線を引く。
+  #                internal: false にすると左右の外枠2本だけになる。
+  #   grid       … マス状。横罫線と縦罫線の両方を引き、セルごとに枠線が入る。
+  #
+  data_table:
+    header_row: 5
+    mode: outline
+    style: thin
